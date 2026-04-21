@@ -161,7 +161,7 @@
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 28px;
+    gap: 56px 28px;
   }
 
   .card {
@@ -228,7 +228,7 @@
   .card-view-icon svg { width: 16px; height: 16px; color: var(--cream); }
 
   .card-meta {
-    padding: 14px 4px 0;
+    padding: 18px 4px 8px;
   }
   .card-name {
     font-family: 'Fraunces', serif;
@@ -259,6 +259,39 @@
   .tag-red { background: rgba(155, 34, 48, 0.2); color: #e07b87; border: 1px solid rgba(155, 34, 48, 0.4); }
   .tag-white { background: rgba(201, 169, 97, 0.15); color: var(--gold); border: 1px solid rgba(201, 169, 97, 0.3); }
   .tag-sparkling { background: rgba(230, 200, 120, 0.15); color: #e6c878; border: 1px solid rgba(230, 200, 120, 0.3); }
+
+  .card-price {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .price-label {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--cream-muted);
+    font-weight: 600;
+  }
+  .price-value {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .price-value .currency {
+    font-size: 12px;
+    color: var(--gold);
+    margin-left: 2px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+  }
 
   /* ===== LIGHTBOX ===== */
   .lightbox {
@@ -351,11 +384,12 @@
   }
 
   @media (max-width: 768px) {
-    .grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .grid { grid-template-columns: repeat(2, 1fr); gap: 40px 14px; }
     .grid-wrap { padding: 0 16px; }
     .header { padding: 32px 20px 16px; }
     .card-name { font-size: 14px; }
     .card-variety { font-size: 10px; }
+    .price-value { font-size: 18px; }
     .lightbox-prev { left: 8px; top: auto; bottom: -60px; transform: none; }
     .lightbox-next { right: 8px; top: auto; bottom: -60px; transform: none; }
     .lightbox-close { top: -42px; }
@@ -408,14 +442,14 @@
 
 <script>
   const wines = [
-    { slug: 'botto',         name: 'Botter',          variety: 'Delle Venezie DOC Pinot Grigio',       type: 'white',     tag: 'White' },
-    { slug: 'artero_macabeo',name: 'Bodegas Artero',  variety: 'Macabeo Verdejo',                      type: 'white',     tag: 'White' },
-    { slug: 'kono',          name: 'Kono',            variety: 'Marlborough Sauvignon Blanc',          type: 'white',     tag: 'White' },
-    { slug: 'grand_tokaj',   name: 'Grand Tokaj',     variety: 'Furmint Dry',                          type: 'white',     tag: 'White' },
-    { slug: 'veuve_guillot', name: 'Veuve Guillot',   variety: 'Brut Chardonnay',                      type: 'sparkling', tag: 'Sparkling' },
-    { slug: 'artero_temp',   name: 'Bodegas Artero',  variety: 'Tempranillo',                          type: 'red',       tag: 'Red' },
-    { slug: 'luis_canas',    name: 'Luis Cañas',      variety: 'Maceración Carbónica',                 type: 'red',       tag: 'Red' },
-    { slug: 'santa_julia',   name: 'Santa Julia',     variety: 'Tintillo · Malbec Bonarda',            type: 'red',       tag: 'Red' },
+    { slug: 'botto',         name: 'Botter',          variety: 'Delle Venezie DOC Pinot Grigio',       type: 'white',     tag: 'White',     glass: 190000, bottle: 1080000 },
+    { slug: 'artero_macabeo',name: 'Bodegas Artero',  variety: 'Macabeo Verdejo',                      type: 'white',     tag: 'White',     glass: null,   bottle: 940000 },
+    { slug: 'kono',          name: 'Kono',            variety: 'Marlborough Sauvignon Blanc',          type: 'white',     tag: 'White',     glass: 150000, bottle: 940000 },
+    { slug: 'grand_tokaj',   name: 'Grand Tokaj',     variety: 'Furmint Dry',                          type: 'white',     tag: 'White',     glass: null,   bottle: 1080000 },
+    { slug: 'veuve_guillot', name: 'Veuve Guillot',   variety: 'Brut Chardonnay',                      type: 'sparkling', tag: 'Sparkling', glass: null,   bottle: 1080000 },
+    { slug: 'artero_temp',   name: 'Bodegas Artero',  variety: 'Tempranillo',                          type: 'red',       tag: 'Red',       glass: 150000, bottle: 940000 },
+    { slug: 'luis_canas',    name: 'Luis Cañas',      variety: 'Maceración Carbónica',                 type: 'red',       tag: 'Red',       glass: null,   bottle: 1120000 },
+    { slug: 'santa_julia',   name: 'Santa Julia',     variety: 'Tintillo · Malbec Bonarda',            type: 'red',       tag: 'Red',       glass: null,   bottle: 920000 },
   ];
 
   const i18n = {
@@ -424,12 +458,14 @@
       sub: 'Tasting Notes · 8 Curated Wines',
       promo: 'Wine Promotion · 22–29/4',
       collection: 'The Collection',
+      bottle: 'Bottle',
     },
     VN: {
       eyebrow: 'Pop-up Thưởng Rượu',
       sub: 'Tasting Notes · 8 Chai Tuyển Chọn',
       promo: 'Khuyến Mãi · 22–29/4',
       collection: 'Bộ Sưu Tập',
+      bottle: 'Giá chai',
     }
   };
 
@@ -443,7 +479,12 @@
   const lbPrev = document.getElementById('lbPrev');
   const lbNext = document.getElementById('lbNext');
 
+  function formatPrice(v) {
+    return v.toLocaleString('vi-VN');
+  }
+
   function renderGrid() {
+    const t = i18n[currentLang];
     grid.innerHTML = wines.map((w, i) => `
       <button class="card" data-index="${i}">
         <div class="card-img-wrap">
@@ -456,6 +497,10 @@
           <div class="card-name">${w.name}</div>
           <div class="card-variety">${w.variety}</div>
           <span class="card-type-tag tag-${w.type}">${w.tag}</span>
+          <div class="card-price">
+            <span class="price-label" data-price-label="bottle">${t.bottle}</span>
+            <span class="price-value">${formatPrice(w.bottle)}<span class="currency">₫</span></span>
+          </div>
         </div>
       </button>
     `).join('');
@@ -475,6 +520,12 @@
     // update images
     grid.querySelectorAll('.card-img').forEach((img, i) => {
       img.src = `images/${wines[i].slug}_${currentLang}.png`;
+    });
+    // update price labels
+    const t = i18n[lang];
+    grid.querySelectorAll('[data-price-label]').forEach(el => {
+      const key = el.dataset.priceLabel;
+      el.textContent = t[key];
     });
     if (lightbox.classList.contains('active')) {
       lbImg.src = `images/${wines[currentIndex].slug}_${currentLang}.png`;
