@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sip Happens — Wine Tasting Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #1a0708;
+    --bg-soft: #2a0d10;
+    --wine: #4a0e14;
+    --wine-glow: #7a1a22;
+    --cream: #f5e8d8;
+    --cream-dim: rgba(245, 232, 216, 0.7);
+    --cream-muted: rgba(245, 232, 216, 0.4);
+    --gold: #c9a961;
+    --border: rgba(245, 232, 216, 0.12);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse 800px 600px at 20% 0%, rgba(122, 26, 34, 0.25), transparent 60%),
+      radial-gradient(ellipse 600px 400px at 80% 100%, rgba(74, 14, 20, 0.3), transparent 60%);
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    padding: 48px 32px 24px;
+    text-align: center;
+    position: relative;
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--cream-muted);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .header-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(40px, 7vw, 72px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+  }
+  .header-title em {
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .header-sub {
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--cream-dim);
+    letter-spacing: 0.02em;
+  }
+  .header-promo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding: 8px 18px;
+    background: rgba(201, 169, 97, 0.12);
+    border: 1px solid rgba(201, 169, 97, 0.3);
+    border-radius: 100px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .header-promo::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.4); }
+  }
+
+  /* ===== LANGUAGE TOGGLE ===== */
+  .lang-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 36px;
+    padding: 0 24px;
+  }
+  .lang-toggle {
+    display: inline-flex;
+    background: rgba(245, 232, 216, 0.06);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 4px;
+    backdrop-filter: blur(10px);
+  }
+  .lang-btn {
+    background: transparent;
+    border: none;
+    color: var(--cream-dim);
+    padding: 10px 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 100px;
+    transition: all 0.3s ease;
+  }
+  .lang-btn:hover { color: var(--cream); }
+  .lang-btn.active {
+    background: var(--cream);
+    color: var(--bg);
+  }
+
+  /* ===== GRID ===== */
+  .grid-wrap {
+    max-width: 1400px;
+    margin: 56px auto 80px;
+    padding: 0 32px;
+  }
+  .grid-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--cream-dim);
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .grid-count {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-style: normal;
+    color: var(--cream-muted);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 28px;
+  }
+
+  .card {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: inherit;
+    font: inherit;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .card:hover { transform: translateY(-6px); }
+
+  .card-img-wrap {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--bg-soft);
+    box-shadow: 0 12px 40px -8px rgba(0,0,0,0.6);
+  }
+  .card-img-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    pointer-events: none;
+    transition: border-color 0.3s;
+  }
+  .card:hover .card-img-wrap::after {
+    border-color: rgba(201, 169, 97, 0.5);
+  }
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .card:hover .card-img { transform: scale(1.03); }
+
+  .card-view-icon {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    background: rgba(26, 7, 8, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: all 0.3s ease;
+  }
+  .card:hover .card-view-icon {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .card-view-icon svg { width: 16px; height: 16px; color: var(--cream); }
+
+  .card-meta {
+    padding: 14px 4px 0;
+  }
+  .card-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  .card-variety {
+    font-size: 12px;
+    color: var(--cream-muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .card-type-tag {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .tag-red { background: rgba(155, 34, 48, 0.2); color: #e07b87; border: 1px solid rgba(155, 34, 48, 0.4); }
+  .tag-white { background: rgba(201, 169, 97, 0.15); color: var(--gold); border: 1px solid rgba(201, 169, 97, 0.3); }
+  .tag-sparkling { background: rgba(230, 200, 120, 0.15); color: #e6c878; border: 1px solid rgba(230, 200, 120, 0.3); }
+
+  /* ===== LIGHTBOX ===== */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 3, 4, 0.94);
+    backdrop-filter: blur(16px);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    animation: fadeIn 0.25s ease;
+  }
+  .lightbox.active { display: flex; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .lightbox-content {
+    position: relative;
+    max-width: min(90vw, 700px);
+    max-height: 92vh;
+  }
+  .lightbox-img {
+    width: 100%;
+    height: auto;
+    max-height: 92vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    display: block;
+  }
+  .lightbox-close {
+    position: absolute;
+    top: -48px;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    background: rgba(245, 232, 216, 0.1);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--cream);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    transition: background 0.2s;
+  }
+  .lightbox-close:hover { background: rgba(245, 232, 216, 0.2); }
+  .lightbox-close svg { width: 18px; height: 18px; }
+
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    background: rgba(26, 7, 8, 0.6);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--cream);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    transition: background 0.2s;
+  }
+  .lightbox-nav:hover { background: rgba(74, 14, 20, 0.8); }
+  .lightbox-nav svg { width: 20px; height: 20px; }
+  .lightbox-prev { left: -66px; }
+  .lightbox-next { right: -66px; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 32px 24px 48px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--cream-muted);
+    letter-spacing: 0.1em;
+  }
+  .footer-brand {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--cream-dim);
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  @media (max-width: 768px) {
+    .grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .grid-wrap { padding: 0 16px; }
+    .header { padding: 32px 20px 16px; }
+    .card-name { font-size: 14px; }
+    .card-variety { font-size: 10px; }
+    .lightbox-prev { left: 8px; top: auto; bottom: -60px; transform: none; }
+    .lightbox-next { right: 8px; top: auto; bottom: -60px; transform: none; }
+    .lightbox-close { top: -42px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-eyebrow" data-i18n="eyebrow">Pop-up Wine Tasting</div>
+  <h1 class="header-title">Sip <em>Happens</em></h1>
+  <p class="header-sub" data-i18n="sub">Tasting Notes · 8 Curated Wines</p>
+  <div class="header-promo" data-i18n="promo">Wine Promotion · 22–29/4</div>
+</header>
+
+<div class="lang-wrap">
+  <div class="lang-toggle" role="tablist">
+    <button class="lang-btn active" data-lang="EN">English</button>
+    <button class="lang-btn" data-lang="VN">Tiếng Việt</button>
+  </div>
+</div>
+
+<main class="grid-wrap">
+  <div class="grid-title">
+    <span data-i18n="collection">The Collection</span>
+    <span class="grid-count">8 Wines</span>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+  <div class="lightbox-content">
+    <button class="lightbox-close" id="lbClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    <button class="lightbox-nav lightbox-prev" id="lbPrev" aria-label="Previous">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <img class="lightbox-img" id="lbImg" alt="">
+    <button class="lightbox-nav lightbox-next" id="lbNext" aria-label="Next">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-brand">Sip Happens</div>
+  <div>Vier Fine Wines · Wine Embassy · Mâm Mâm Eatery &amp; Lounge</div>
+</footer>
+
+<script>
+  const wines = [
+    { slug: 'botto',         name: 'Botter',          variety: 'Delle Venezie DOC Pinot Grigio',       type: 'white',     tag: 'White' },
+    { slug: 'artero_macabeo',name: 'Bodegas Artero',  variety: 'Macabeo Verdejo',                      type: 'white',     tag: 'White' },
+    { slug: 'kono',          name: 'Kono',            variety: 'Marlborough Sauvignon Blanc',          type: 'white',     tag: 'White' },
+    { slug: 'grand_tokaj',   name: 'Grand Tokaj',     variety: 'Furmint Dry',                          type: 'white',     tag: 'White' },
+    { slug: 'veuve_guillot', name: 'Veuve Guillot',   variety: 'Brut Chardonnay',                      type: 'sparkling', tag: 'Sparkling' },
+    { slug: 'artero_temp',   name: 'Bodegas Artero',  variety: 'Tempranillo',                          type: 'red',       tag: 'Red' },
+    { slug: 'luis_canas',    name: 'Luis Cañas',      variety: 'Maceración Carbónica',                 type: 'red',       tag: 'Red' },
+    { slug: 'santa_julia',   name: 'Santa Julia',     variety: 'Tintillo · Malbec Bonarda',            type: 'red',       tag: 'Red' },
+  ];
+
+  const i18n = {
+    EN: {
+      eyebrow: 'Pop-up Wine Tasting',
+      sub: 'Tasting Notes · 8 Curated Wines',
+      promo: 'Wine Promotion · 22–29/4',
+      collection: 'The Collection',
+    },
+    VN: {
+      eyebrow: 'Pop-up Thưởng Rượu',
+      sub: 'Tasting Notes · 8 Chai Tuyển Chọn',
+      promo: 'Khuyến Mãi · 22–29/4',
+      collection: 'Bộ Sưu Tập',
+    }
+  };
+
+  let currentLang = 'EN';
+  let currentIndex = 0;
+
+  const grid = document.getElementById('grid');
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbClose = document.getElementById('lbClose');
+  const lbPrev = document.getElementById('lbPrev');
+  const lbNext = document.getElementById('lbNext');
+
+  function renderGrid() {
+    grid.innerHTML = wines.map((w, i) => `
+      <button class="card" data-index="${i}">
+        <div class="card-img-wrap">
+          <img class="card-img" src="images/${w.slug}_${currentLang}.png" alt="${w.name} ${w.variety}" loading="lazy">
+          <div class="card-view-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M14 10l6.1-6.1M9 21H3v-6M10 14l-6.1 6.1"/></svg>
+          </div>
+        </div>
+        <div class="card-meta">
+          <div class="card-name">${w.name}</div>
+          <div class="card-variety">${w.variety}</div>
+          <span class="card-type-tag tag-${w.type}">${w.tag}</span>
+        </div>
+      </button>
+    `).join('');
+    grid.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', () => openLightbox(parseInt(card.dataset.index)));
+    });
+  }
+
+  function applyLang(lang) {
+    currentLang = lang;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (i18n[lang][key]) el.textContent = i18n[lang][key];
+    });
+    document.documentElement.lang = lang === 'VN' ? 'vi' : 'en';
+    // update images
+    grid.querySelectorAll('.card-img').forEach((img, i) => {
+      img.src = `images/${wines[i].slug}_${currentLang}.png`;
+    });
+    if (lightbox.classList.contains('active')) {
+      lbImg.src = `images/${wines[currentIndex].slug}_${currentLang}.png`;
+    }
+  }
+
+  function openLightbox(index) {
+    currentIndex = index;
+    lbImg.src = `images/${wines[index].slug}_${currentLang}.png`;
+    lbImg.alt = `${wines[index].name} — ${wines[index].variety}`;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  function navigate(dir) {
+    currentIndex = (currentIndex + dir + wines.length) % wines.length;
+    lbImg.src = `images/${wines[currentIndex].slug}_${currentLang}.png`;
+  }
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+  });
+  lbClose.addEventListener('click', closeLightbox);
+  lbPrev.addEventListener('click', () => navigate(-1));
+  lbNext.addEventListener('click', () => navigate(1));
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') navigate(-1);
+    if (e.key === 'ArrowRight') navigate(1);
+  });
+
+  renderGrid();
+</script>
+</body>
+</html>
